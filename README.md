@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img alt="DoWhile2021 App" height="80" title="DoWhile20201 App" src=".github/logo.png" />
+  <img alt="DoWhile2021 App" height="20" title="DoWhile20201 App" src=".github/logo.png" />
 </h1>
 
 <p align="center">
