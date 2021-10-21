@@ -1,11 +1,16 @@
 import React from 'react';
 
-import { Container, Title } from './styles';
+import { Header } from '../../components/Header';
+import { MessageList } from '../../components/MessageList';
+
+import { Container } from './styles';
 
 export const Home: React.FC = () => {
 	return (
 		<Container>
-			<Title>Teste</Title>
+			<Header />
+
+			<MessageList />
 		</Container>
 	);
 };
