@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { io } from 'socket.io-client';
 
 import { api } from '../../services/api';
 
@@ -14,9 +15,29 @@ interface Message {
 	};
 }
 
+const messagesQueue: Message[] = [];
+
+const socket = io('http://localhost:4000');
+
+socket.on('new_message', newMessage => {
+	messagesQueue.push(newMessage);
+});
+
 export const MessageList: React.FC = () => {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		const timer = setInterval(() => {
+			if (messagesQueue.length > 0) {
+				setMessages(oldstate =>
+					[messagesQueue[0], oldstate[0], oldstate[1]].filter(Boolean),
+				);
+
+				messagesQueue.shift();
+			}
+		}, 3000);
+	}, []);
 
 	useEffect(() => {
 		async function fetchMessages() {
