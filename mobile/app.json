@@ -1,8 +1,9 @@
 {
 	"expo": {
-		"name": "mobile",
-		"slug": "mobile",
+		"name": "dowhile",
+		"slug": "dowhile",
 		"version": "1.0.0",
+		"scheme": "dowhile",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {

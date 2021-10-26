@@ -1,24 +1,51 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { io } from 'socket.io-client';
 
-import { Message } from '../Message';
+import { api } from '../../services/api';
+import { Message, MessageProps } from '../Message';
 
 import { Container } from './styles';
 
+let messagesQueue: MessageProps[] = [];
+
+const socket = io(String(api.defaults.baseURL));
+socket.on('new_message', newMessage => {
+	messagesQueue.push(newMessage as MessageProps);
+});
+
 export const MessageList: React.FC = () => {
-	const message = {
-		id: '1',
-		text: 'Não vejo a hora de começar esse evento, com certeza vai ser o melhor de todos os tempos, vamooo pra cima! 🔥🔥',
-		user: {
-			name: 'th1ag0-Zz',
-			avatar_url: 'https://github.com/th1ag0-Zz.png'
+	const [currentMessages, setCurrentsMessages] = useState<MessageProps[]>([]);
+
+	useEffect(() => {
+		async function fetchMessages() {
+			const messagesResponse = await api.get<MessageProps[]>('/messages/last3');
+			setCurrentsMessages(messagesResponse.data);
 		}
-	}
+
+		fetchMessages();
+	}, []);
+
+	useEffect(() => {
+		const timer = setInterval(() => {
+			if (messagesQueue.length > 0) {
+				setCurrentsMessages(oldstate => [
+					messagesQueue[0],
+					oldstate[0],
+					oldstate[1],
+				]);
+
+				messagesQueue.shift();
+			}
+		}, 3000);
+
+		return () => clearInterval(timer);
+	}, []);
 
 	return (
 		<Container keyboardShouldPersistTaps='never'>
-			<Message data={message} />
-			<Message data={message} />
-			<Message data={message} /> 
+			{currentMessages.map(message => (
+				<Message key={message.created_at} data={message} />
+			))}
 		</Container>
 	);
 };

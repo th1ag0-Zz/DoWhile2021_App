@@ -1,6 +1,5 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
-import { ThemeProvider } from 'styled-components/native';
 import AppLoading from 'expo-app-loading';
 import {
 	useFonts,
@@ -10,7 +9,7 @@ import {
 
 import { Home } from './src/screens/Home';
 
-import theme from './src/theme';
+import { Providers } from './src/providers';
 
 export default function App() {
 	const [fontsLoaded] = useFonts({
@@ -23,13 +22,13 @@ export default function App() {
 	}
 
 	return (
-		<ThemeProvider theme={theme}>
+		<Providers>
 			<StatusBar
 				barStyle='light-content'
 				backgroundColor='transparent'
 				translucent
 			/>
 			<Home />
-		</ThemeProvider>
+		</Providers>
 	);
 }
